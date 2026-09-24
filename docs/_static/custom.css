@@ -1,0 +1,20 @@
+:root {
+  --content-width: 52rem;
+}
+
+.admonition.theorem {
+  border-color: var(--color-brand-primary);
+}
+
+.admonition.theorem > .admonition-title {
+  background-color: color-mix(in srgb, var(--color-brand-primary) 16%, transparent);
+}
+
+.math-wrapper {
+  overflow-x: auto;
+}
+
+table.docutils td,
+table.docutils th {
+  vertical-align: top;
+}

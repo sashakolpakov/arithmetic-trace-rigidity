@@ -1,0 +1,24 @@
+# macOS and editor metadata
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+
+# Lean/Lake build cache (several gigabytes; never commit)
+formal/.lake/
+
+# Sphinx build output
+docs/_build/
+
+# LaTeX intermediates.  The three release PDFs remain tracked.
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.toc
