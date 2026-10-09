@@ -7,13 +7,12 @@ No declaration in this file is an axiom.  Each structure collects hypotheses
 passed explicitly to the later theorems, making clear which mathematical
 statements are assumed rather than proved in Lean.
 
-`MovingSelection.select` assumes the existence of the moving configuration
-when the character is eligible, the group element is noncentral, `N ≥ 3`,
-and critical trace growth holds.  In the manuscript this existence follows
-from prime-square mixing, finite-field avoidance, and moving-element
-selection.  `LowerMassEstimate` states the resulting Roth reduced-divisor
-lower bound, while `UpperMassEstimate` states the geometric and congruence
-upper bound for the same mass.
+`MovingSelection.select` supplies an abstract certificate when the character
+is eligible, the element is noncentral, `N ≥ 3`, and critical growth holds.
+`LowerMassEstimate` and `UpperMassEstimate` bound the same auxiliary scalar
+after the first three limits. The scalar need not be a limit of normalized
+divisor norms. `OrderedLocalExpansionInputs.toLocalExpansionInputs` derives
+these shorter structures from the ordered pre-limit estimates.
 
 `ArithmeticInputs` records specialization rigidity, the local-height
 decomposition, the deduction of integrality, total reality, and bounded
@@ -26,15 +25,16 @@ namespace TraceSparsity
 
 open CompactTraceDatum
 
-/-- Configurations produced by the moving bounded-exponent construction. -/
+/-- Abstract certificates for the post-limit estimates. The ordered
+conversion below records a fixed-index coefficient bound in this type. -/
 structure MovingSelection (D : CompactTraceDatum) where
   Configuration : D.Character → D.Element → ℕ → Type
   select : ∀ (y : D.Character) (b : D.Element) (N : ℕ),
     D.Eligible y → ¬ D.IsCentral b → 3 ≤ N → D.CriticalTraceGrowth →
       Nonempty (Configuration y b N)
 
-/-- Roth's reduced-divisor estimate, after normalization by the moving
-parameter and after the auxiliary errors except `η` have been removed. -/
+/-- Lower coefficient bound for the auxiliary mass, after the first three
+limits, with an arbitrarily small additive error. -/
 structure LowerMassEstimate (D : CompactTraceDatum)
     (S : MovingSelection D) where
   mass : ∀ {y b N}, S.Configuration y b N → ℝ
@@ -43,8 +43,8 @@ structure LowerMassEstimate (D : CompactTraceDatum)
       ∀ η : ℝ, 0 < η →
         ((2 : ℝ) * N - 4) * D.localHeight y b ≤ mass c + η
 
-/-- The moving congruence-wedge estimate, including the geometric trace
-support upper bound. -/
+/-- Upper coefficient bound for the same auxiliary mass. In the manuscript
+this bound comes from congruence counting and geometric trace support. -/
 structure UpperMassEstimate (D : CompactTraceDatum)
     (S : MovingSelection D) (R : LowerMassEstimate D S) where
   upper : ∀ {y b N} (c : S.Configuration y b N),
@@ -85,6 +85,35 @@ structure OrderedLocalExpansionInputs (D : CompactTraceDatum) where
   centralLocalHeight : ∀ y b, D.Eligible y → D.IsCentral b →
     D.localHeight y b = 0
   centralLength : ∀ b, D.IsCentral b → D.length b = 0
+
+/-- The shorter assumptions follow from the ordered estimates.  A
+configuration records the proved fixed-index coefficient bound.  Its mass
+is the lower coefficient expression, an auxiliary real number between the two
+bounds; no limit of the normalized divisor norms is assumed. -/
+def OrderedLocalExpansionInputs.toLocalExpansionInputs
+    {D : CompactTraceDatum} (I : OrderedLocalExpansionInputs D) :
+    LocalExpansionInputs D where
+  selection := {
+    Configuration := fun y b N =>
+      PLift (CoefficientBound N (D.localHeight y b) (D.length b))
+    select := by
+      intro y b N hy hb hN hGrowth
+      exact ⟨⟨coefficientBound_from_full_manuscript_estimate hN
+        (I.movingEstimate y b hy hb hGrowth N hN)⟩⟩
+  }
+  lowerEstimate := {
+    mass := fun {y b N} _ => ((2 : ℝ) * N - 4) * D.localHeight y b
+    lower := by
+      intro y b N c hy hb hN η hη
+      exact le_add_of_nonneg_right hη.le
+  }
+  upperEstimate := {
+    upper := by
+      intro y b N c hy hb hN η hη
+      exact le_trans c.down (le_add_of_nonneg_right hη.le)
+  }
+  centralLocalHeight := I.centralLocalHeight
+  centralLength := I.centralLength
 
 /-- The global arithmetic hypotheses.  Their correspondence with the
 manuscript is recorded separately. -/

@@ -49,8 +49,11 @@ translation and rotation.
 Roots in a general reductive group
 ----------------------------------
 
-For a connected reductive group :math:`G`, the centralizer
-:math:`J_g=Z_G(g)` of a regular semisimple element is a torus.  The family of
+For a connected reductive group :math:`G`, the connected centralizer
+:math:`J_g=Z_G(g)^\circ` of a regular semisimple element is its unique
+maximal torus. The full centralizer can be disconnected, as for the class
+of :math:`\operatorname{diag}(1,-1)` in :math:`\mathrm{PGL}_2` in
+characteristic different from two. The family of
 :math:`m`-th roots is therefore not normally a single-valued rational map.
 It is the finite Kummer torsor
 
@@ -60,11 +63,16 @@ It is the finite Kummer torsor
    \longrightarrow G^{\mathrm{rs}}
 
 under :math:`J[m]`, of degree :math:`m^{\operatorname{rank}G}` when the
-characteristic does not divide :math:`m`.  At a rational point, the
+characteristic does not divide :math:`m`. Every root is then semisimple: its
+unipotent part has order dividing :math:`m` and must be trivial. A maximal
+torus containing the root also contains its power :math:`g`, so uniqueness
+puts the root in :math:`J_g`.  At a rational point, the
 obstruction to a rational branch lies in
-:math:`H^1(k,J_g[m])`.  A splitting or cameral cover splits and labels the
-maximal torus, removing the Weyl ambiguity in that choice.  The Kummer torsor
-then supplies the root branches, which Weyl and Galois monodromy permute.
+:math:`H^1(k,J_g[m])`.  After a splitting base change for the group, the
+finite étale cover that chooses a Borel subgroup containing :math:`g`
+splits the connected centralizer and removes the Weyl ambiguity.
+The Kummer torsor then supplies the root branches, which Weyl and Galois
+monodromy permute.
 
 For a connected real semisimple linear group, the real geometry is still
 simple.  If :math:`h^m=g` with :math:`g` regular semisimple, their Jordan

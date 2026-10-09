@@ -12,13 +12,16 @@ A finite consistency example
 
 * one character and two abstract elements;
 * a designated central element and a designated nonidentity element;
-* identically zero length and local height;
+* zero length and local height at the central element, and length two and
+  local height one at the noncentral element;
 * witnesses satisfying the ordered hypotheses used in the successive limits;
   and
 * values of both ``OrderedLocalExpansionInputs`` and ``ArithmeticInputs``.
 
-It then invokes the public ordered theorem on that datum.  This makes three
-purely logical facts machine-checkable: the structures are not contradictory,
+It invokes the public ordered theorem and derives the shorter assumptions
+through the proved conversion before applying the shorter theorem.
+The noncentral element attains the coefficient :math:`1/2` with positive values.
+This makes three purely logical facts machine-checkable: the structures are not contradictory,
 their dependent fields fit together, and the public theorem can actually be
 applied.  The model is deliberately finite and carries no claim of being a
 surface group.
@@ -73,3 +76,41 @@ The table in ``formal/MANUSCRIPT_MAP.md`` compares this interpretation field
 by field. The comparison is necessarily mathematical rather than formal: the
 Lean project does not define character varieties, number fields, or Fuchsian
 groups.
+
+
+A worked audit of the numerical estimate
+----------------------------------------
+
+``TraceSparsity/CoefficientAudit.lean`` adds 25 checked declarations for the
+English-to-Lean translation of the local-expansion estimate and its limits.
+The external results supplying that estimate are accepted as inputs. The
+checks concern the domains, hypotheses, quantifier order, error terms, and
+conclusion of the statement used by Lean.
+
+For nonnegative length :math:`L`, the audit proves the equivalence
+
+.. math::
+
+   \bigl[\forall N\ge3,\ (2N-4)J\le ((2N-1)/2)L\bigr]
+   \quad\Longleftrightarrow\quad J\le L/2.
+
+The sharp positive family is :math:`J=s`, :math:`L=2s` for every
+:math:`s\ge0`. It supplies both the fixed-index hypotheses and the full
+ordered pre-limit witnesses, then applies the production theorems. Other
+examples test positive slack, the zero boundary, and nonzero normalized
+errors that tend to zero.
+
+The negative cases refute incorrect changes to the statement: checking only
+finitely many indices, choosing one error tolerance or one value of
+:math:`\theta`, letting the error coefficient depend on :math:`\theta`,
+discarding a nonvanishing remainder, or claiming a strict or smaller bound.
+For every finite cutoff :math:`M\ge3`, the values :math:`J=M+1`,
+:math:`L=2M` pass every index through :math:`M` but violate :math:`J\le L/2`.
+This family shows why finite testing must accompany a quantifier audit and
+a general proof.
+
+The full statement comparison and example table are in
+``formal/COEFFICIENT_AUDIT.md``. Each negative case is a proved counterexample
+to an altered statement, rather than an unsuccessful attempt to prove it.
+These numerical examples do not assert geometric realizations, and this one
+worked audit does not claim example coverage for every manuscript statement.

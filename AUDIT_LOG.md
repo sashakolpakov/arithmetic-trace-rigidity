@@ -453,3 +453,113 @@ Status: complete on 26 September 2026.
 - The resulting PDFs have 31, 131, and 21 pages. All 81 cited keys are supplied
   by the sole 81-entry bibliography, and the artifact hashes are recorded in
   `RELEASE_MANIFEST.md`.
+
+
+## Round 12: proof hypotheses, formal conversion, and language
+
+Status: complete on 8 October 2026.
+
+Scope: the focused proof and all eleven project Lean sources were reviewed,
+with targeted checks of the companion's division construction, root-section
+classification, divisor and trace-fiber arguments, moving-element proof,
+and summaries. The positive-trace-gap manuscript was checked for the
+corresponding proof and language issues. This is an internal audit, not an
+independent certification of the full companion or a new literature survey.
+
+- The companion's universal division construction now uses the connected
+  centralizer. A regular semisimple element can have a disconnected full
+  centralizer: the class of `diag(1,-1)` in `PGL₂` is an example in
+  characteristic different from two. The proof now explains why every
+  prime-to-characteristic root is semisimple and belongs to the unique
+  maximal torus containing its power. The splitting cover is described by
+  choosing a Borel subgroup. The root-section classification separately
+  removes the proper Weyl fixed loci before identifying the full adjoint
+  centralizer with a torus. The connected-centralizer fact was checked
+  against Proposition 4.1.9 of
+  [Conrad's algebraic-group notes](https://virtualmath1.stanford.edu/~conrad/249BW16Page/handouts/249B_2016.pdf).
+- The general finitely generated-field two-trace bound now has its absolute
+  irreducibility hypothesis in the abstract and overview, matching the
+  theorem. An explicit triangular example with exponentially many elements
+  in one two-trace fiber shows why the hypothesis is necessary. The compact
+  Fuchsian argument treats reducible pairs separately. Fiber upper bounds
+  are written as inequalities, including when a fiber is empty.
+- The spectral absorption condition now has a fixed positive exponential
+  margin, rather than an ambiguous subtraction of an unspecified `o(R)`.
+  The moving-element proof explicitly makes its height slope positive and
+  excludes zero polynomial values from the large-valuation event. The
+  companion now defines the retained graph vertices and edge representatives
+  at the point of use and uses the proved lower bound on the number of edges.
+- The trace-length comparison records the central traces and both signs
+  exactly. The manuscripts distinguish reduced numerator/denominator
+  divisors from radicals, keep the finite exceptional prime set visible,
+  and state the degree normalization of the height. The fixed-`S` hypothesis
+  in the companion's Roth consequence is explicit. The mixed-energy summary
+  includes the relative square-class restriction. The positive-trace-gap
+  text now distinguishes infinitely many distinct projective values from
+  eventual pairwise distinctness and states Zariski density in `SL₂`, whose
+  linear span is the matrix algebra.
+- The cited spectral, expansion, character-coordinate, and marked-length
+  inputs were rechecked at the passages used: Gorodnik--Nevo Theorem 4.5 and
+  the translated-coset counting statements
+  ([source](https://arxiv.org/pdf/0903.1515)); Salehi Golsefidy Theorem 1
+  ([source](https://arxiv.org/pdf/1602.00409)); Heusener--Porti Proposition 2.2
+  ([source](https://arxiv.org/pdf/math/0302075)); and Thurston Proposition 2.1
+  and Theorem 8.5 ([source](https://arxiv.org/pdf/math/9801039)). The focused
+  manuscript now identifies the latter two statements explicitly.
+- The Lean limit argument now exposes the exact fixed-index coefficient
+  estimate. A new conversion derives `LocalExpansionInputs` from
+  `OrderedLocalExpansionInputs`: the shorter formulation uses an auxiliary
+  scalar bounded by the two coefficients and does not assume that normalized
+  divisor norms converge. Both public limit deductions use the same
+  fixed-index proof. The finite consistency example now has noncentral
+  local height one and length two, attains the coefficient `1/2`, and applies
+  both public arithmetic certificates. The axiom audit includes all five
+  new public declarations.
+- The formal documentation now says which limit lemmas enter the final
+  deduction and which algebraic and combinatorial lemmas are separate
+  verified results. The analytic, geometric, and arithmetic input structures
+  remain explicit hypotheses; this is not an end-to-end Lean proof of the
+  lattice theorem. The corresponding Sphinx pages were brought into agreement.
+- Final `make verify` passed: all eleven project Lean files and all public
+  entry-point declarations compiled, and the printed dependencies were only
+  `propext`, `Quot.sound`, and `Classical.choice`. The forced TeX builds and
+  final logs passed, the strict Sphinx build passed, all 81 cited keys were
+  covered by the 81-entry bibliography, and all 27 local Markdown links
+  resolved. Isolated clean builds reproduced all three PDFs byte for byte;
+  their 31/131/21 page counts and hashes agree with `RELEASE_MANIFEST.md`.
+  Revised proof pages and all three title pages were visually inspected.
+  `git diff --check` passed. No publication or deployment was performed.
+
+
+## Round 13: worked audit of an English-to-Lean translation
+
+Status: complete on 9 October 2026.
+
+- The external mathematical statements are accepted as inputs. This audit
+  compares the English pre-limit estimate and numerical conclusion in the
+  focused local-expansion proof with their Lean signatures, rather than
+  attempting to formalize the external theories.
+- `formal/COEFFICIENT_AUDIT.md` records the domains, quantifiers, constant
+  dependencies, normalized errors, and conclusion. No mismatch was found in
+  this numerical translation. The full ordered signature and the shorter
+  fixed-index signature are displayed together.
+- `CoefficientAudit.lean` adds 25 declarations: satisfying numerical families,
+  applications of the production theorems, counterexamples to altered
+  hypotheses and conclusions, and an exact classification of the admissible
+  real inputs. Every declaration is included in the entry-point axiom audit.
+- For every finite cutoff M, a checked counterexample passes every index up
+  to M while violating the claimed limiting bound. Further counterexamples
+  detect existential error tolerances, theta-dependent coefficients,
+  nonvanishing remainders, isolated moving indices, and false strengthenings
+  of the conclusion. An additional proof identifies a valid weakening:
+  unbounded successful indices suffice.
+- The report distinguishes negative examples to altered statements from
+  counterexamples to a proved theorem. It also records that this is one
+  worked audit; the repository does not yet have positive and negative
+  example coverage for every English statement.
+- Final `make verify` passed, including the 3,013-job Lean build, direct
+  entry-point compilation, all 25 worked-audit declarations and their axiom
+  checks, the twelve-file source scan, strict Sphinx build, all 33 local
+  Markdown links, and bibliography, final TeX log, manifest, and isolated
+  byte-for-byte PDF reproduction checks. The manuscript sources and PDFs
+  were unchanged by this worked-audit addition. `git diff --check` passed.

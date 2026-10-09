@@ -3,6 +3,7 @@ import TraceSparsity.MovingFiberIdentity
 import TraceSparsity.CongruenceWedge
 import TraceSparsity.Arithmeticity
 import TraceSparsity.ContractAudit
+import TraceSparsity.CoefficientAudit
 
 /-!
 # Trace sparsity: formalized conditional implications
@@ -29,9 +30,12 @@ namespace TraceSparsity
 #print axioms card_le_fiberBound_mul_product
 #print axioms abstract_congruence_wedge_bound
 #print axioms congruence_wedge_bound_from_residue_classes
+#print axioms coefficientBound_from_manuscript_order
 #print axioms half_bound_from_manuscript_order
 #print axioms moving_parameter_limit
+#print axioms coefficientBound_from_full_manuscript_estimate
 #print axioms half_bound_from_full_manuscript_estimate
+#print axioms OrderedLocalExpansionInputs.toLocalExpansionInputs
 #print axioms half_bound_of_arbitrary_errors
 #print axioms persistent_local_expansion
 #print axioms persistent_local_expansion_ordered
@@ -43,6 +47,36 @@ namespace TraceSparsity
 #print axioms compact_sarnak_from_ordered_inputs
 #print axioms ContractAudit.ordered_contract_inhabited
 #print axioms ContractAudit.toy_ordered_certificate_applies
+#print axioms ContractAudit.toy_post_limit_certificate_applies
+#print axioms ContractAudit.toy_noncentral_sharp
 #print axioms ContractAudit.critical_growth_alone_not_sufficient
+
+#print axioms half_bound_of_all_coefficients
+#print axioms CoefficientAudit.all_coefficients_iff
+#print axioms CoefficientAudit.all_coefficients_iff_half
+#print axioms CoefficientAudit.sharp_positive_family
+#print axioms CoefficientAudit.strict_positive_family
+#print axioms CoefficientAudit.zero_boundary
+#print axioms CoefficientAudit.negative_length_example
+#print axioms CoefficientAudit.negative_length_converse_fails
+#print axioms CoefficientAudit.single_index_is_insufficient
+#print axioms CoefficientAudit.finite_prefix_is_insufficient
+#print axioms CoefficientAudit.strict_conclusion_is_false
+#print axioms CoefficientAudit.smaller_constant_is_false
+#print axioms CoefficientAudit.every_violation_has_a_failing_index
+#print axioms CoefficientAudit.existential_error_is_insufficient
+#print axioms CoefficientAudit.one_epsilon_is_insufficient
+#print axioms CoefficientAudit.theta_dependent_constant_is_insufficient
+#print axioms CoefficientAudit.one_theta_is_insufficient
+#print axioms CoefficientAudit.positive_moving_witness
+#print axioms CoefficientAudit.positive_moving_witness_applies
+#print axioms CoefficientAudit.sharp_ordered_estimate
+#print axioms CoefficientAudit.sharp_ordered_family_applies
+#print axioms CoefficientAudit.unbounded_indices_suffice
+#print axioms CoefficientAudit.nonvanishing_remainder_is_insufficient
+#print axioms CoefficientAudit.one_moving_index_is_insufficient
+
+#print axioms CoefficientAudit.varying_data_is_insufficient
+#print axioms CoefficientAudit.moving_dependent_constant_is_insufficient
 
 end TraceSparsity

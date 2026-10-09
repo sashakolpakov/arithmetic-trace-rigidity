@@ -49,14 +49,14 @@
 \title[Trace sparsity and arithmeticity]
  {Trace Sparsity and Arithmeticity for Compact Hyperbolic Surfaces}
 \author{}
-\date{Working paper, 26 September 2026}
+\date{Working paper, 8 October 2026}
 
 \begin{document}
 
 \begin{abstract}
 Let \(\Gamma<\PSL_2(\R)\) be a torsion-free cocompact lattice, and let
 \(T(\Gamma)\) be the set of traces of the full inverse image of \(\Gamma\)
-in \(\SL_2(\R)\).  We prove arithmeticity already at the critical
+in \(\SL_2(\R)\).  We prove arithmeticity under the critical
 trace-growth exponent:
 \[
  \limsup_{X\to\infty}
@@ -89,11 +89,12 @@ To prove this estimate, we fix an index in the Chebyshev recurrence and
 vary the group element.  Roth's theorem bounds from below the reduced
 divisor of two consecutive recurrence terms.  Expansion in congruence
 quotients modulo \(p^2\) allows us to choose elements for which no prime
-occurs in that divisor to an unbounded power.  We obtain the corresponding
+outside a fixed finite set occurs in that divisor to an unbounded power.
+We obtain the corresponding
 upper bound by combining three counts: a uniform bound for fibers of two
 trace functions, a congruence count for moduli with bounded prime
-exponents, and an injective map from length-two paths in a bipartite trace
-graph.  Algebraic specialization and Thurston's asymmetric
+exponents, and a bound on the fibers of a map from length-two paths in a
+bipartite trace graph.  Algebraic specialization and Thurston's asymmetric
 length-spectrum metric then show that the original Fuchsian character
 cannot be transcendental.  Section~\ref{sec:external-inputs} states the
 analytic and arithmetic results from the literature, including all
@@ -153,10 +154,14 @@ length satisfies
 \begin{equation}\label{eq:trace-length}
  |\Tr g|=2\cosh\frac{\ell(g)}2.
 \end{equation}
-Consequently, \(N_\Gamma(X)\) differs by at most a factor of two from the
-number of distinct translation lengths at most
-\(2\operatorname{arcosh}(X/2)=2\log X+O(1)\); the factor two accounts only
-for the two trace signs.  This observation converts the trace statements used here
+Consequently, if \(L_\Gamma(R)\) counts distinct positive translation
+lengths at most \(R\), including lengths of iterates, then
+\[
+ N_\Gamma(X)=2+2L_\Gamma\bigl(2\operatorname{arcosh}(X/2)\bigr).
+\]
+The constant term counts the central traces \(\pm2\), and the factor two
+counts the two signs of each hyperbolic trace.  Since
+\(2\operatorname{arcosh}(X/2)=2\log X+O(1)\), this converts the trace statements used here
 into the usual length formulations in \cite{Sarnak,Schmutz}.
 
 For context, Luo and Sarnak proved that arithmetic cofinite Fuchsian groups
@@ -294,7 +299,8 @@ Lipschitz constant in the marked homotopy class with
  =\log\sup_{\gamma\ne1}\frac{\ell_y(\gamma)}{\ell_x(\gamma)}.
 \]
 It defines a separating asymmetric metric on Teichm\"uller space
-\cite{ThurstonStretch}.  The displayed domination therefore gives
+\cite[Proposition~2.1 and Theorem~8.5]{ThurstonStretch}.
+The displayed domination therefore gives
 \(d_{\rm Th}(x,y)\le0\).  Since this metric is nonnegative, it is zero, and
 its separation property gives \(x=y\).
 \end{proof}
@@ -783,7 +789,7 @@ The two roots are reciprocal, so replacing \(z_v\) by \(z_v^{-1}\) does
 not change \(\chi_v(t)\); the extension of the absolute value to the finite
 splitting field is unique up to conjugacy and gives the same value.  The
 element \(t\) is integral at all but finitely many finite places.  At every
-remaining finite place both roots are units, and hence only finitely many
+finite place where \(t\) is integral, both roots are units, so only finitely many
 nonarchimedean terms in \(\cJ_k(t)\) are nonzero.
 
 Our absolute logarithmic Weil height is normalized by
@@ -1231,9 +1237,9 @@ exponent of \(\mathfrak c\) is at most \(D\), then, in the range
  +(\Norm\mathfrak c)^{2+o(1)}e^{(1-\delta_D)R}.
 \end{equation}
 The error terms are uniform for fixed \(x,y,D\).  In particular, the second
-term is absorbed by the first whenever
+term is absorbed by the first if, for some fixed \(\eta>0\),
 \begin{equation}\label{eq:counting-absorption-condition}
- 3\log\Norm\mathfrak c<\delta_D R-o(R).
+ 3\log\Norm\mathfrak c\le(\delta_D-\eta)R.
 \end{equation}
 Consequently, if \(\log\Norm\mathfrak c_m\le Am+O(1)\), choose, after
 \(D,A,\delta_D\) have been fixed, a constant
@@ -1426,8 +1432,8 @@ the error term by the main term is
 \[
  (\Norm\mathfrak c)^{3+o(1)}e^{-\delta_D R},
 \]
-which tends to zero in the range
-\(3\log\Norm\mathfrak c<\delta_D R-o(R)\).
+which tends to zero under the fixed positive margin in
+\eqref{eq:counting-absorption-condition}.
 
 The constants are not claimed to be uniform as \(D\to\infty\).  In each
 application, \(D\) is fixed first and the radius constant is then chosen to
@@ -1562,7 +1568,9 @@ For \(t\in k\) which is neither a zero nor a pole, put
 Here \(\operatorname{ord}_{\mathfrak p}\) is the discrete valuation
 normalized by \(\operatorname{ord}_{\mathfrak p}(\mathfrak p)=1\).  The
 absolute value in the exponent records both numerator and denominator
-primes, each with its full valuation.
+primes, each with its full valuation.  Here \emph{reduced} means that common
+numerator and denominator factors have been cancelled; it does not mean
+that prime exponents have been truncated to one.
 For every \(\epsilon>0\), outside a finite set of \(t\in k\),
 \begin{equation}\label{eq:roth-reduced-divisor}
  \log\Norm\mathfrak m_{f,S}(t)
@@ -1633,7 +1641,7 @@ constant because \(k,N,S,\epsilon\) are fixed.
 \subsection{Local density of square divisibility}
 
 The selection argument in Lemma~\ref{lem:moving-bounded-exponents} requires
-the following codimension-two estimate modulo \(\mathfrak p^2\).
+the following density estimate modulo \(\mathfrak p^2\).
 
 \begin{lemma}[square-divisor density]
 \label{lem:square-divisor-density}
@@ -1648,7 +1656,7 @@ Theorem~\ref{input:strong-approximation}.  If
  \frac{\#\{g\in Q_{p^2}:F_N(\Tr g)\equiv0\pmod{\mathfrak p^2}
                  \text{ for some }\mathfrak p\mid p\}}
       {\#Q_{p^2}}
- \ll_N p^{-2}.
+ \ll_{N,y,S} p^{-2}.
 \end{equation}
 \end{lemma}
 
@@ -1914,6 +1922,9 @@ nonzero,
  \log\Norm\bigl(F_N(\Tr_y(b^mh))\cO_{k_y,S_0}\bigr)
  \le A_Nm+O_N(1).
 \end{equation}
+Shrink \(\theta_0\), if necessary, so that the coefficient of \(m\) in
+the lower bound \eqref{eq:moving-J} is positive for
+\(0<\theta\le\theta_0\).
 The distinguished real place makes \(\cJ_{k_y}(\Tr_y b)>0\), so
 \eqref{eq:moving-J} implies that the traces under consideration eventually
 leave every fixed finite set.  In particular, \(F_N\) does not vanish for
@@ -1943,7 +1954,8 @@ Indeed, \((D+1)\log\Norm\mathfrak p\le A_Nm+O_N(1)\), and the rational
 prime below \(\mathfrak p\) is no larger than \(\Norm\mathfrak p\).  The
 union bound in \eqref{eq:square-event} gives
 \begin{align}
- \Pr(&\text{some prime-to-}S\text{ exponent exceeds }D)\notag\\
+ \Pr(&\Phi(h)\ne0\text{ and some prime-to-}S
+          \text{ exponent exceeds }D)\notag\\
  &\le C_N\sum_{p>Z}p^{-2}
  +\exp\left(
    \left(\frac{(B+1)A_N}{D+1}-\delta\theta\right)m+o(m)
@@ -2069,8 +2081,8 @@ the fact that \(|\varepsilon|_w=1\) outside \(S_E\) give the exact identity
  =2[E:\Q]h(\varepsilon).
 \end{equation}
 Every such field \(E\) has degree at most \(2[L:\Q]\), and \(S_E\) has
-cardinality bounded in terms of \(L,S\).  Kronecker's theorem says that
-height zero is equivalent to being a root of unity.  Together with
+cardinality bounded in terms of \(L,S\).  Kronecker's theorem says that a
+nonzero algebraic number has height zero if and only if it is a root of unity.  Together with
 Northcott finiteness, it follows that there is a positive lower bound,
 depending only on \(2[L:\Q]\), for the height of a non-torsion algebraic
 number of these degrees; the number of roots of unity is uniformly bounded
@@ -2367,9 +2379,10 @@ Theorem~\ref{input:bounded-exponent-counting}.  Choose
 \end{equation}
 and put \(R=Cm\).  Equations
 \eqref{eq:upper-ideal-linear-bound} and
-\eqref{eq:moving-wedge-radius} give, with a linear margin,
+\eqref{eq:moving-wedge-radius} give, for some fixed \(\eta>0\) and all
+sufficiently large \(m\),
 \[
- 3\log\Norm\mathfrak c_m<\delta_D R-o(R).
+ 3\log\Norm\mathfrak c_m\le(\delta_D-\eta)R.
 \]
 Thus the absorption condition
 \eqref{eq:counting-absorption-condition} holds.
@@ -2626,9 +2639,10 @@ Suppose now that \(x\) is transcendental.  Then \(\dim Z_x>0\), and
 Proposition~\ref{prop:bounded-degree-specialization} gives algebraic
 Fuchsian characters \(y_j\in Z_x\) converging to \(x\), all in the same
 Fuchsian component as \(x\).  Choose one of them.  Since \(x\) is
-transcendental, \(y_j\ne x\).  Corollary~\ref{cor:specialization-rigidity}
-therefore gives \(y_j=x\), a contradiction.  The transcendental case is therefore
-impossible, and the algebraic argument proves the theorem.
+transcendental, \(y_j\ne x\), whereas
+Corollary~\ref{cor:specialization-rigidity} gives \(y_j=x\).
+This contradiction excludes the transcendental case, and the algebraic
+argument proves the theorem.
 \end{proof}
 
 \begin{proof}[Proof of Corollary~\ref{cor:schmutz-sarnak}]

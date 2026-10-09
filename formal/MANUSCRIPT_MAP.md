@@ -31,12 +31,19 @@ as verbatim statements from the literature.
 | Counting length-two paths by residue classes | `principalResidueClass`, `wedge_fiber_card_le_principal_residue_class`, `congruence_wedge_bound_from_residue_classes` | Defines the finite class modulo `PQ`, derives the fiber bound from its maximum population, and proves `|E|² ≤ |V| M |X₋| |X₊|` |
 | Abstract finite-fiber counting | `card_le_fiberBound_mul_product`, `square_sum_degrees_le`, `abstract_congruence_wedge_bound` | Reusable factorization of the same finite-fiber and Cauchy--Schwarz argument |
 | Limit as the parameter `m` tends to infinity | `MovingLimitWitness`, `moving_parameter_limit` | Removal of the normalized `O(1)` and `o(m)` terms from the assumed eventual estimate |
-| Order of the four remaining limits | `half_bound_from_manuscript_order`, `half_bound_from_full_manuscript_estimate` | Fix `N`, choose `0 < ε < 2N-4`, choose `θ` and the auxiliary data, take `m → ∞`, then `θ → 0`, `ε → 0`, and `N → ∞`; the resulting coefficient is exactly `1/2` |
+| Fixed-index bound and conversion to the shorter formulation | `coefficientBound_from_manuscript_order`, `coefficientBound_from_full_manuscript_estimate`, `OrderedLocalExpansionInputs.toLocalExpansionInputs` | Removes the first three limits and supplies an auxiliary mass without assuming convergence of divisor norms |
+| Order of the four successive limits | `half_bound_from_manuscript_order`, `half_bound_from_full_manuscript_estimate` | Fix `N`, choose `0 < ε < 2N-4`, choose `θ` and the auxiliary data, take `m → ∞`, then `θ → 0`, `ε → 0`, and `N → ∞`; the resulting coefficient is exactly `1/2` |
 
-These formal proofs are independent of the final conditional theorem.  The
-recurrence, fiber, Fricke, and length-two-path declarations are not used as
-premises of that theorem, and Lean does not yet derive its analytic
-assumptions from them.
+The limiting lemmas are used directly by the final conditional theorem.
+The recurrence, fiber, Fricke, and length-two-path calculations are separate:
+Lean does not yet derive the analytic assumptions from those declarations.
+
+[The worked coefficient audit](COEFFICIENT_AUDIT.md) compares the English
+pre-limit estimate and limiting argument with their exact Lean signatures.
+It supplies satisfying families, counterexamples to individual alterations,
+and a complete classification of the numerical inputs. The external results
+are accepted inputs; the audit concerns fidelity of their representation and
+the deductions from them.
 
 ## Meaning of the Lean assumptions
 
@@ -90,28 +97,30 @@ project does not define character varieties or surface groups in Lean.
 | `compact_sarnak_from_ordered_inputs` | Torsion-free surface part of the bounded-clustering assertion in Corollary `cor:schmutz-sarnak` | Lean proves this conditional implication using `clusteringToLinear` and `linearToCritical`; the separate Selberg passage to orbifolds is not formalized. |
 
 `LocalExpansionInputs` and the final declarations named `*_from_inputs` use a
-shorter formulation that begins after the moving-parameter limit.  The
+shorter formulation that begins after the first three limits.  The
 declarations named `*_from_ordered_inputs` are closer to the manuscript because
 they retain the full order of parameters and limits.  The names without a
 suffix are aliases retained for existing Lean code; they do not assert an
 end-to-end formal proof.
 
-### Shorter formulation after the moving-parameter limit
+### Shorter formulation after the first three limits
 
-This formulation assumes separate lower and upper mass inequalities after the
-moving-parameter and `θ` errors have been removed.  It does not use
-`MovingLimitWitness.normalized_estimate`; that eventual pre-limit inequality
-belongs only to the ordered formulation.  The post-limit assumptions are
-listed separately below.  Their presence does not mean that Lean proves the
-underlying analytic estimates.
+This formulation uses a single auxiliary real number between the two
+fixed-index coefficient bounds, after the `m`, `θ`, and `ε` limits.
+It does not assert that the normalized divisor norms converge.
+`OrderedLocalExpansionInputs.toLocalExpansionInputs` now derives these
+structures from the ordered assumptions: it first proves the fixed-index
+bound and then chooses its lower endpoint as the auxiliary mass.
+Direct callers may still supply the shorter structures independently.
+Lean does not prove the underlying analytic estimates.
 
 | Lean field | Manuscript counterpart | How Lean uses it |
 |---|---|---|
-| `MovingSelection.Configuration` | The fixed auxiliary data and selected moving elements after `y`, `b`, and `N` are chosen in Lemma `lem:moving-bounded-exponents` | An indexing type that remembers the selected configuration but not its internal congruence or random-walk construction. |
-| `MovingSelection.select` | Existence of the elements \(a_m=b^mh_m\) under algebraic persistence, noncentrality, `N ≥ 3`, and critical trace growth | **Proved in the manuscript and assumed by Lean.**  The conclusion `Nonempty` supplies one configuration to which both normalized bounds below apply. |
-| `LowerMassEstimate.mass` | The normalized logarithmic norm of the reduced recurrence divisor for the selected configuration | A real quantity used in both the lower and upper estimates. |
-| `LowerMassEstimate.lower` | Corollary `cor:roth-recurrence-pair`, after normalization and removal of the pre-limit errors | **Post-limit statement proved in the manuscript and assumed by Lean.**  The coefficient is exactly `2N-4`; every remaining positive additive error is the Lean parameter `η`. |
-| `UpperMassEstimate.upper` | Theorem `thm:recurrence-divisor-upper`, after normalization and removal of the moving-parameter and `θ` errors | **Post-limit statement proved in the manuscript and assumed by Lean.**  The coefficient is exactly `(2N-1)/2`. |
+| `MovingSelection.Configuration` | A certificate of the coefficient bound after the first three limits | An indexing type; the conversion uses `PLift (CoefficientBound N J L)`, with no geometric data stored. |
+| `MovingSelection.select` | Existence of the fixed-index certificate under eligibility, noncentrality, `N ≥ 3`, and critical trace growth | The conversion derives `Nonempty` from `movingEstimate` by the first three limits; the moving elements themselves are not constructed in Lean. |
+| `LowerMassEstimate.mass` | An auxiliary real number between the lower and upper coefficient bounds | The same scalar occurs in both inequalities. The conversion chooses `(2N-4)J`; it does not identify this scalar with a limit of divisor norms. |
+| `LowerMassEstimate.lower` | Corollary `cor:roth-recurrence-pair`, after normalization and removal of the pre-limit errors | The coefficient is exactly `2N-4`. In the conversion this is the chosen mass, so the inequality holds for every positive additive error `η`. |
+| `UpperMassEstimate.upper` | Theorem `thm:recurrence-divisor-upper`, after normalization and removal of the moving-parameter and `θ` errors | The coefficient is exactly `(2N-1)/2`. The conversion proves the inequality from the ordered fixed-index bound, then allows any positive additive error `η`. |
 | `LocalExpansionInputs.selection` | The preceding `MovingSelection` assumptions | Records the selected configuration. |
 | `LocalExpansionInputs.lowerEstimate` | The preceding `LowerMassEstimate` assumptions | Records the lower estimate for that configuration. |
 | `LocalExpansionInputs.upperEstimate` | The preceding `UpperMassEstimate` assumptions for the same selection and mass | Records the upper estimate.  Its dependent type ensures that both inequalities concern the same configuration and the same value of `mass`. |
@@ -160,9 +169,11 @@ longer part of the final specialization statement represented in Lean.
 
 `TraceSparsity/ContractAudit.lean` supplies a finite example with nonempty
 types of characters and elements, distinct central and noncentral elements,
-and simultaneous values of `OrderedLocalExpansionInputs` and
-`ArithmeticInputs`.
-It also applies the ordered implication in that example.  This shows that all
+positive length and local height at the noncentral element, and simultaneous
+values of `OrderedLocalExpansionInputs` and `ArithmeticInputs`.
+It applies both the ordered implication and the shorter implication obtained
+through the proved conversion. The noncentral element has length two and
+local height one, attaining the limiting coefficient `1/2`.  This shows that all
 dependent assumptions can be satisfied simultaneously; it does not realize
 them by a hyperbolic surface.
 

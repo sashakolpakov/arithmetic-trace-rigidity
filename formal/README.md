@@ -13,13 +13,19 @@ compact orbifolds is not separately formalized.
 
 See `MANUSCRIPT_MAP.md` for the mathematical meaning of each declaration, the
 direction in which each cited result is used, and the precise scope of the
-formalization.
+formalization. [COEFFICIENT_AUDIT.md](COEFFICIENT_AUDIT.md) gives a worked
+English-to-Lean audit with satisfying families and proved counterexamples
+to changes in individual hypotheses, quantifiers, and conclusions.
 
 The verification has four parts:
 
 1. `ContractAudit.lean` gives a finite example in which all abstract types and
-   hypotheses can be supplied simultaneously.  It also gives a second example
+   hypotheses can be supplied simultaneously, with positive noncentral
+   length and local height. It also gives a second example
    in which critical growth holds but arithmeticity does not.
+   `CoefficientAudit.lean` adds 25 declarations auditing the numerical
+   local-expansion estimate, including infinite families of positive and
+   negative tests and direct applications of the production limit theorems.
 2. `MANUSCRIPT_MAP.md` identifies the mathematical object represented by each
    abstract type and proposition.
 3. The same file distinguishes restatements equivalent up to normalization
@@ -37,7 +43,8 @@ The files have the following roles:
   also formalizes the exact order: fix `N`, then `ε`, then `θ`, choose
   auxiliary data, let `m` tend to infinity (including the normalized
   `O(1)` and `o(m)` errors), and only then send
-  `θ`, `ε`, and `N` to their limits.
+  `θ`, `ε`, and `N` to their limits. It also proves the fixed-index
+  bound needed to derive the shorter formulation from the ordered estimates.
 - `MovingFiberIdentity.lean` proves the quadratic elimination, the full
   determinant-one Fricke commutator identity, and factorization used in the
   uniform two-trace fiber theorem.
@@ -54,7 +61,10 @@ The files have the following roles:
   pre-limit estimate or separate post-limit lower and upper mass estimates;
   and the specialization and arithmeticity statements that use Thurston
   rigidity, the local-height decomposition, and Takeuchi's criterion.  These
-  fields are hypotheses supplied to Lean theorems, not global axioms.  Lean
+  fields are hypotheses supplied to Lean theorems, not global axioms.
+  `OrderedLocalExpansionInputs.toLocalExpansionInputs` derives the shorter
+  structures from the ordered ones. Its auxiliary mass is the lower
+  coefficient bound, so no convergence of normalized divisor norms is assumed.  Lean
   does not check their proofs in the manuscript.  The
   weaker critical trace-growth condition used in the strengthened theorem is
   distinct from literal linear growth, and the implication from linear growth
@@ -73,7 +83,13 @@ The files have the following roles:
 - `ContractAudit.lean` shows that all assumptions in the ordered formulation
   can hold simultaneously and proves the counterexample described above.
   Its finite example is not a geometric realization.
-- `Main.lean` prints the axiom dependencies of the public results.
+- `CoefficientAudit.lean` classifies the real inputs satisfying all fixed-index
+  estimates and supplies satisfying examples and counterexamples to incorrect
+  changes in quantifiers, error assumptions, and the sharp conclusion.
+  [The worked report](COEFFICIENT_AUDIT.md) compares the English and Lean
+  statements field by field.
+- `Main.lean` prints the axiom dependencies of the public results and every
+  declaration in the worked coefficient audit.
 
 Build with:
 

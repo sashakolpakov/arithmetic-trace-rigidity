@@ -12,7 +12,8 @@ How the formal proof relates to the manuscript
 Four separate checks connect the Lean theorem with the mathematical proof.
 
 1. **Consistency of the hypotheses.**  A finite example shows that all the
-   assumption structures can be filled at once.  A second example satisfies
+   assumption structures can be filled at once, with positive length and
+   local height at its noncentral element. A second example satisfies
    the formal critical-growth predicate but is declared nonarithmetic.  Thus
    arithmeticity does not follow from that predicate alone.  Neither example
    is meant to represent a hyperbolic surface.
@@ -41,6 +42,9 @@ Lean proves the following calculations rather than accepting them as input:
 * the concrete Chinese-remainder restriction and the resulting count of
   length-two paths in the trace graph;
 * removal of the normalized :math:`O(1)` and :math:`o(m)` terms;
+* derivation of the shorter assumptions from the ordered estimates, using an
+  auxiliary mass between the coefficient bounds without assuming that the
+  normalized divisor norms converge;
 * the order of :math:`m`, :math:`\theta`, :math:`\varepsilon`, and :math:`N`
   limits and the resulting coefficient :math:`1/2`;
 * the deduction from local equality through Takeuchi's criterion and passage

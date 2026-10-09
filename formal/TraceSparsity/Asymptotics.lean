@@ -73,37 +73,34 @@ theorem half_bound_of_arbitrary_errors {J L : ℝ}
   intro N hN
   exact coefficientBound_of_arbitrary_error (h N hN)
 
-/-- The parameter order appearing in the manuscript, made literal.
+/-- The parameter order at a fixed index, made literal.
 
-The quantities `J`, `L`, `A`, and `B` are fixed before `N`, `ε`, and `θ` are
-chosen; in particular, `A` and `B` cannot depend on any of those three
-parameters.  After `N` and `ε` have been fixed, `θ` is chosen, and the
-sieve and expansion data may then be chosen as a function of `N`, `ε`, and
-`θ`.  The limit in the moving parameter has already produced the displayed
-inequality.  The proof sends `θ` to zero, then `ε` to zero, and only
-afterwards lets `N` tend to infinity.  The auxiliary type can contain the
-finite set of places, the exponent cutoff, the walk-length constant, and all
-other choices made at that stage.
+The quantities `N`, `J`, `L`, `A`, and `B` are fixed before `ε` and `θ`;
+in particular, the constants cannot depend on those error parameters.
+After `ε` has been fixed, `θ` is chosen, and the sieve and expansion data
+may then depend on `N`, `ε`, and `θ`. The moving-parameter limit has
+already produced the displayed inequality. The proof sends `θ` to zero
+and then `ε` to zero, keeping `N` fixed. The auxiliary type can contain
+the finite set of places, the exponent cutoff, the walk-length constant,
+and the other choices made at that stage.
 -/
-theorem half_bound_from_manuscript_order
-    {J L A B : ℝ}
+theorem coefficientBound_from_manuscript_order
+    {N : ℕ} {J L A B : ℝ}
     {Auxiliary : ℕ → ℝ → ℝ → Type}
-    (h : ∀ (N : ℕ), 3 ≤ N →
-      ∀ ε : ℝ, 0 < ε → ε < (2 : ℝ) * N - 4 →
+    (hN : 3 ≤ N)
+    (h : ∀ ε : ℝ, 0 < ε → ε < (2 : ℝ) * N - 4 →
       ∃ θ₀ : ℝ, 0 < θ₀ ∧
         ∀ θ : ℝ, 0 < θ → θ < θ₀ →
         ∃ _aux : Auxiliary N ε θ,
           ((2 : ℝ) * N - 4 - ε) * (J - A * θ) ≤
             (((2 : ℝ) * N - 1) / 2) * (L + B * θ)) :
-    J ≤ L / 2 := by
-  apply half_bound_of_all_coefficients
-  intro N hN
+    CoefficientBound N J L := by
   have hAfterEpsilon : ∀ ε : ℝ, 0 < ε →
       ε < (2 : ℝ) * N - 4 →
       ((2 : ℝ) * N - 4 - ε) * J ≤
         (((2 : ℝ) * N - 1) / 2) * L := by
     intro ε hε hεlt
-    obtain ⟨θ₀, hθ₀, hsmall⟩ := h N hN ε hε hεlt
+    obtain ⟨θ₀, hθ₀, hsmall⟩ := h ε hε hεlt
     let θseq : ℕ → ℝ := fun n => 1 / ((n : ℝ) + 1)
     have hθzero : Filter.Tendsto θseq Filter.atTop (nhds 0) := by
       simpa [θseq] using
@@ -160,6 +157,23 @@ theorem half_bound_from_manuscript_order
       norm_num
     linarith
 
+/-- The fixed-index bounds give the limiting coefficient after the auxiliary
+parameters have been removed separately for each index. -/
+theorem half_bound_from_manuscript_order
+    {J L A B : ℝ}
+    {Auxiliary : ℕ → ℝ → ℝ → Type}
+    (h : ∀ (N : ℕ), 3 ≤ N →
+      ∀ ε : ℝ, 0 < ε → ε < (2 : ℝ) * N - 4 →
+      ∃ θ₀ : ℝ, 0 < θ₀ ∧
+        ∀ θ : ℝ, 0 < θ → θ < θ₀ →
+        ∃ _aux : Auxiliary N ε θ,
+          ((2 : ℝ) * N - 4 - ε) * (J - A * θ) ≤
+            (((2 : ℝ) * N - 1) / 2) * (L + B * θ)) :
+    J ≤ L / 2 := by
+  apply half_bound_of_all_coefficients
+  intro N hN
+  exact coefficientBound_from_manuscript_order hN (h N hN)
+
 /-- A normalized version of the estimate before the moving parameter tends
 to infinity.  The terms `leftConstant/(m+1)` and
 `rightConstant/(m+1)` are the normalized `O(1)` terms; `remainder` is the
@@ -212,6 +226,31 @@ theorem moving_parameter_limit
   filter_upwards [w.normalized_estimate] with m hm
   simpa [invScale, div_eq_mul_inv] using hm
 
+/-- The full pre-limit estimate implies the exact bound at a fixed index.
+This does not require the normalized divisor norms themselves to converge. -/
+theorem coefficientBound_from_full_manuscript_estimate
+    {N : ℕ} {J L A B : ℝ} (hN : 3 ≤ N)
+    (h : ∀ ε : ℝ, 0 < ε → ε < (2 : ℝ) * N - 4 →
+      ∃ θ₀ : ℝ, 0 < θ₀ ∧
+      ∀ θ : ℝ, 0 < θ → θ < θ₀ →
+        Nonempty (MovingLimitWitness
+          ((2 : ℝ) * N - 4 - ε)
+          (((2 : ℝ) * N - 1) / 2)
+          J L (A * θ) (B * θ))) :
+    CoefficientBound N J L := by
+  apply coefficientBound_from_manuscript_order
+    (Auxiliary := fun _ ε θ =>
+      MovingLimitWitness
+        ((2 : ℝ) * N - 4 - ε)
+        (((2 : ℝ) * N - 1) / 2)
+        J L (A * θ) (B * θ)) hN
+  intro ε hε hεlt
+  obtain ⟨θ₀, hθ₀, hwitness⟩ := h ε hε hεlt
+  refine ⟨θ₀, hθ₀, ?_⟩
+  intro θ hθ hθlt
+  obtain ⟨w⟩ := hwitness θ hθ hθlt
+  exact ⟨w, moving_parameter_limit w⟩
+
 /-- The complete limit argument with its quantifiers displayed.  The
 constants `A` and `B` are fixed before `N`, `ε`, and `θ`.  A
 `MovingLimitWitness` is chosen only after those three parameters have been
@@ -228,17 +267,8 @@ theorem half_bound_from_full_manuscript_estimate
           (((2 : ℝ) * N - 1) / 2)
           J L (A * θ) (B * θ))) :
     J ≤ L / 2 := by
-  apply half_bound_from_manuscript_order
-    (Auxiliary := fun N ε θ =>
-      MovingLimitWitness
-        ((2 : ℝ) * N - 4 - ε)
-        (((2 : ℝ) * N - 1) / 2)
-        J L (A * θ) (B * θ))
-  intro N hN ε hε hεlt
-  obtain ⟨θ₀, hθ₀, hwitness⟩ := h N hN ε hε hεlt
-  refine ⟨θ₀, hθ₀, ?_⟩
-  intro θ hθ hθlt
-  obtain ⟨w⟩ := hwitness θ hθ hθlt
-  exact ⟨w, moving_parameter_limit w⟩
+  apply half_bound_of_all_coefficients
+  intro N hN
+  exact coefficientBound_from_full_manuscript_estimate hN (h N hN)
 
 end TraceSparsity

@@ -41,15 +41,19 @@ inductive ToyElement where
   | noncentral
   deriving DecidableEq
 
-/-- A finite datum satisfying the required numerical relations.  All
-numerical quantities vanish, and its two elements distinguish the central
-and noncentral cases. -/
+/-- A finite datum satisfying the numerical relations.  The noncentral
+element has length two and local height one, so it attains the final
+coefficient with positive values. -/
 def toyDatum : CompactTraceDatum where
   Character := Unit
   Element := ToyElement
   distinguished := ()
-  length := fun _ => 0
-  localHeight := fun _ _ => 0
+  length := fun b => match b with
+    | .central => 0
+    | .noncentral => 2
+  localHeight := fun _ b => match b with
+    | .central => 0
+    | .noncentral => 1
   IsAlgebraic := fun _ => True
   IsPersistent := fun _ => True
   IsCentral := fun b => b = ToyElement.central
@@ -66,8 +70,8 @@ def toyDatum : CompactTraceDatum where
   Arithmetic := True
 
 /-- The ordered pre-limit hypotheses can be instantiated in the finite
-example.  For the noncentral case, the moving-limit witness has zero constants
-and zero remainder, so the normalized inequality is `0 ≤ 0`. -/
+example.  The witness has zero constants and remainder, while the
+noncentral local height and length are positive. -/
 def toyOrderedLocal : OrderedLocalExpansionInputs toyDatum where
   leftThetaCoefficient := fun _ _ => 0
   rightThetaCoefficient := fun _ _ => 0
@@ -82,12 +86,18 @@ def toyOrderedLocal : OrderedLocalExpansionInputs toyDatum where
       remainder_tendsto_zero := tendsto_const_nhds
       normalized_estimate := ?_
     }⟩
-    exact Filter.Eventually.of_forall (fun m => by simp [toyDatum])
+    exact Filter.Eventually.of_forall (fun m => by
+      cases b <;> simp [toyDatum]
+      linarith)
   centralLocalHeight := by
     intro y b hy hb
+    change b = ToyElement.central at hb
+    subst b
     rfl
   centralLength := by
     intro b hb
+    change b = ToyElement.central at hb
+    subst b
     rfl
 
 /-- The global arithmetic hypotheses can be instantiated for `toyDatum`.
@@ -100,7 +110,9 @@ theorem toyArithmetic : ArithmeticInputs toyDatum where
     trivial
   distinguishedLower := by
     intro hxAlg b hb
-    change (0 : ℝ) / 2 ≤ 0
+    change b = ToyElement.noncentral at hb
+    subst b
+    change (2 : ℝ) / 2 ≤ 1
     norm_num
   equalityConsequences := by
     intro hxAlg hEquality
@@ -138,6 +150,20 @@ required by the theorem. -/
 theorem toy_ordered_certificate_applies : toyDatum.Arithmetic := by
   exact compact_critical_growth_from_ordered_inputs
     toyDatum toyOrderedLocal toyArithmetic trivial
+
+/-- The ordered assumptions also instantiate the shorter formulation through
+the proved conversion, with no independent choice of a limiting mass. -/
+theorem toy_post_limit_certificate_applies : toyDatum.Arithmetic := by
+  exact compact_critical_growth_from_inputs
+    toyDatum toyOrderedLocal.toLocalExpansionInputs toyArithmetic trivial
+
+/-- The example attains the limiting coefficient at a positive local height. -/
+theorem toy_noncentral_sharp :
+    0 < toyDatum.localHeight () ToyElement.noncentral ∧
+    toyDatum.localHeight () ToyElement.noncentral =
+      toyDatum.length ToyElement.noncentral / 2 := by
+  change (0 : ℝ) < 1 ∧ (1 : ℝ) = 2 / 2
+  norm_num
 
 /-- A counterexample to the assertion that critical trace growth alone
 implies arithmeticity.  The other global propositions are set to false

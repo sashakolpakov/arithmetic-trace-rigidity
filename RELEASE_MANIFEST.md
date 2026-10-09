@@ -4,18 +4,19 @@ Candidate name: **Arithmetic Trace Rigidity**<br>
 Repository slug: `arithmetic-trace-rigidity`<br>
 Repository URL: <https://github.com/sashakolpakov/arithmetic-trace-rigidity><br>
 Documentation URL: <https://sashakolpakov.github.io/arithmetic-trace-rigidity/><br>
-Verification date: 26 September 2026 (Europe/Zurich)
+Verification date: 9 October 2026 (Europe/Zurich)
 
-This manifest describes the commit containing it.  It records the initial
-public pre-release candidate; no archival tag is claimed.
+This manifest describes the audited revision of the public pre-release
+candidate. It records the artifacts in this source tree; no archival tag
+is claimed.
 
 ## Manuscript artifacts
 
 | Artifact | Pages | SHA-256 | Provenance |
 |---|---:|---|---|
-| `paper/compact-trace-rigidity.pdf` | 31 | `87df80c44830ad487399a74be6ef7e2fba2f194d0d8d9446e07cd266141f0524` | Reproducibly built from the adjacent TeX source; unattributed working paper |
-| `paper/trace-gap-companion.pdf` | 131 | `9b021ad08d25fb2644fdba6489238ab0843eb7d4fe01fd222ace7a1c4f42b16d` | Reproducibly built from the adjacent TeX source; unattributed working paper |
-| `paper/positive-trace-gap.pdf` | 21 | `d213521cf39a90918c97db9c6e3cb4aad2a7579506ad1adc780db60db78d74c3` | Reproducibly built from Nikolay Bogachev's adjacent TeX source |
+| `paper/compact-trace-rigidity.pdf` | 31 | `71113fe50c2b040eaf08f4aabc43ff90af821e04916bd1d14f6e095eacb5af00` | Reproducibly built from the adjacent TeX source; unattributed working paper |
+| `paper/trace-gap-companion.pdf` | 131 | `204a1b2ad3af50789fd7658f45bc5d2f24be123d0acb0c5f686d750df3ca95b1` | Reproducibly built from the adjacent TeX source; unattributed working paper |
+| `paper/positive-trace-gap.pdf` | 21 | `45a89b15d64f7cbe0b0818eb61453745d8aafd5b0973f0706ccc2b4036b3c9e0` | Reproducibly built from Nikolay Bogachev's adjacent TeX source |
 
 The repository fixes `SOURCE_DATE_EPOCH=1790035200`, `FORCE_SOURCE_DATE=1`,
 and `TZ=UTC` through `.latexmkrc` and the root Makefile.  Isolated clean builds
@@ -36,7 +37,7 @@ All three sources resolve citations through the sole 81-entry database
   support Python 3.10 or later
 - ripgrep for the repository verification scripts
 - Sphinx 9.1.0 and Furo 2025.12.19 for the mathematical documentation
-- 11 project Lean source files, excluding dependencies and generated files
+- 12 project Lean source files, excluding dependencies and generated files
 
 The repository pins its Lean toolchain in `formal/lean-toolchain` and its Lake
 dependency revisions in `formal/lake-manifest.json`.
@@ -49,7 +50,7 @@ The command
 make verify
 ```
 
-completed successfully on this candidate. It performed forced builds of
+completed successfully on this audit revision. It performed forced builds of
 all three TeX manuscripts, validation of the common bibliography, isolated
 byte-for-byte PDF rebuilds, `lake build`, direct compilation of
 `TraceSparsity/Main.lean`, an automated check of its printed axiom
@@ -58,9 +59,11 @@ declarations, final-log citation/reference checks, validation of relative
 Markdown links, a strict warning-free Sphinx build, and
 artifact-set/hash/page-count checks.
 
-The Lean build was also tested in a fresh clone with `formal/.lake/` absent.
-Lake fetched the exact manifest revisions and completed all 3,019 clean-build
-jobs; the subsequent direct entry-point compilation and axiom audit passed.
+The initial candidate was also tested in a fresh clone on 25 September 2026
+with `formal/.lake/` absent; that historical result is recorded in Round 10
+of `AUDIT_LOG.md`. The current audit rebuilt the pinned local dependency
+checkout and the revised project sources; the final incremental build
+completed successfully with 3,013 jobs.
 The PDF isolation test copies the TeX sources without preserving modification
 times, so it checks both absolute-path and fresh-checkout timestamp
 independence.
@@ -68,20 +71,26 @@ independence.
 Observed formal dependencies were only the documented standard Mathlib
 principles `propext`, `Quot.sound`, and `Classical.choice`.  The source scan
 found no project declaration of `axiom`, `opaque`, `sorry`, `admit`, `unsafe`,
-`partial`, or `extern` in any of the eleven project Lean files.  A compiled
-finite example satisfies all the ordered local and arithmetic assumptions,
-and a second example verifies that critical growth alone does not imply
-arithmeticity. Final TeX logs had no undefined citation, undefined
-reference, duplicate-label, hyperref-bookmark, missing-glyph, or overfull-box
+`partial`, or `extern` in any of the twelve project Lean files.  A compiled
+finite example satisfies all the ordered local and arithmetic assumptions
+with noncentral local height one and length two. It applies both public
+formulations through the proved conversion. A second example verifies that
+critical growth alone does not imply arithmeticity. The worked coefficient
+audit adds 25 declarations comparing the numerical English-to-Lean
+translation through satisfying families and proved counterexamples to
+altered statements. All are included in the axiom audit. Final TeX logs had no
+undefined citation, undefined reference, duplicate-label, hyperref-bookmark, missing-glyph, or overfull-box
 warning; remaining underfull bibliography boxes are nonblocking.
 
-Visual inspection covered all three title pages and final bibliography pages,
-the focused main and local theorems, the corrected finite-covolume Takeuchi
-statement, the reduced-divisor passage, the logical dependency summary, and
-the repaired trace-gap and order arguments in Bogachev's manuscript.
+Visual inspection during the 8 October manuscript audit covered the three
+title pages, the focused
+trace-length identity, spectral absorption and moving-element passages, the
+companion's connected-centralizer construction, root-section restriction,
+height normalization and irreducibility example, and the projective-sequence
+argument in Bogachev's manuscript. The 9 October worked translation audit
+changed the formal material and documentation; all three PDF hashes stayed
+the same and were reverified.
 
-The public `main` branch contains one squashed commit.  Its Documentation
-workflow deployed the strict Sphinx build to
-<https://sashakolpakov.github.io/arithmetic-trace-rigidity/>; the workflow
-completed successfully and post-deployment HTTPS requests to the landing page
-and substantive mathematical pages returned status 200.
+The initial public release and documentation deployment were verified on
+25 September 2026, as recorded in Round 10 of `AUDIT_LOG.md`. These local
+build results do not verify a later documentation deployment.

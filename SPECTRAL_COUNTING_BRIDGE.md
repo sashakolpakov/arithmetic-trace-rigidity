@@ -170,10 +170,11 @@ The total error is at most
 \tag{6}
 \]
 
-To make (6) no larger than the main term it is enough that
+To absorb (6) into the main term, it is enough that, for some fixed
+\(\eta>0\) and all sufficiently large \(R\),
 
 \[
- 3\log N\mathfrak c<\delta_D R-o(R).
+ 3\log N\mathfrak c\le(\delta_D-\eta)R.
 \tag{7}
 \]
 
